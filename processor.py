@@ -59,5 +59,9 @@ for entry in journals_data:
         journal_commands = journal_commands + f"\t\jnar{{{entry[6]}}}\n\n"
 journal_commands = journal_commands + "}"
 
+ledger_commands = "Work In Process"
+
 with open(f"{choice}_journal.tex", "w") as file:
     file.write(journal_commands)
+with open(f"{choice}_ledger.tex", "w") as file:
+    file.write(ledger_commands)
