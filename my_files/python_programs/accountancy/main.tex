@@ -1,0 +1,89 @@
+\documentclass[a4paper, 10pt]{article}
+
+\usepackage{geometry}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{enumerate, enumitem}
+\usepackage{titlesec}
+\usepackage{array}
+\usepackage{makecell}
+
+\geometry{margin=1cm}
+\setlength{\parindent}{0pt}
+\pagestyle{empty}
+
+\titleformat{\section}{\bfseries\large}{\thesection. }{0cm}{}
+
+\newcommand{\insertitem}[1]{\item #1}
+\NewDocumentCommand{\mylist}{>{\SplitList{;;;}}m}
+{
+	\begin{enumerate}[itemsep = 0pt, topsep = 0pt, parsep = 0pt, partopsep = 0pt, leftmargin = *]
+		\ProcessList{#1}{\insertitem}	
+	\end{enumerate}
+}
+
+\newcommand{\journal}[1]{
+	\begin{center}
+		{\bfseries Journal}
+	\end{center}
+	\vspace{-.3cm}
+	\begin{tabularx}{\linewidth}{|c|X|c|r|r|}
+		\hline
+		\textbf{Date} & \textbf{Particulars} & \textbf{LF} & \textbf{Dr Amt} & \textbf{Cr Amt} \\
+		\hline
+		#1
+		\hline
+	\end{tabularx}
+}
+
+\newcommand{\ledger}[3]{
+	\begin{center}
+		{Dr. \hfill {\bfseries #1} \hfill Cr.}
+	\end{center}
+	\vspace{-.3cm}
+	\noindent
+	\begin{minipage}{.5\linewidth}
+		\begin{tabularx}{\linewidth}{|c|X|c|r|}
+			\hline
+			\textbf{Date} & \textbf{Particulars} & \textbf{JF} & \textbf{Amt} \\
+			\hline
+			#2
+			\hline
+		\end{tabularx}
+	\end{minipage}
+	\hspace{-.2cm}
+	\begin{minipage}{.5\linewidth}
+		\begin{tabularx}{\linewidth}{|c|X|c|r|}
+			\hline
+			\textbf{Date} & \textbf{Particulars} & \textbf{JF} & \textbf{Amt} \\
+			\hline
+			#3
+			\hline
+		\end{tabularx}
+	\end{minipage}
+}		
+
+\newcommand{\jyear}[1]{{\bfseries #1} & & & & \\}
+\newcommand{\jdr}[4]{#1 & #2 a/c \hfill ...Dr \hfill & #3 & #4 & \\}
+\newcommand{\jcr}[2]{& \hspace{.5cm} To #1 a/c & & & #2 \\}
+\newcommand{\jnar}[1]{& {(\itshape #1)} & & & \\ \cline{2-2}}
+
+\newcommand{\lyear}[1]{{\bfseries #1} & & & \\}
+\newcommand{\ldr}[3]{#1 & To #2 a/c & & #3 \\}
+\newcommand{\lcr}[3]{#1 & By #2 a/c & & #3 \\}
+\newcommand{\drbal}[2]{#1 & To balance c/d & & #2 \\}
+\newcommand{\crbal}[2]{#1 & By balance c/d & & #2 \\}
+\newcommand{\total}[1]{\cline{4-4} & & & #1 \\}
+\newcommand{\mt}{& & & \\}
+
+\begin{document}
+	
+	\begin{center}
+		{\bfseries\LARGE Bookkeeping with \LaTeX{}} \\ \medskip
+		{\LARGE Automation with Python}
+	\end{center}
+	
+	\section{Journal Entries:}
+	\input{illustration_journal.tex}
+	
+\end{document}
