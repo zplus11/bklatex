@@ -1,0 +1,17 @@
+{"entries": [
+    ['2023'],
+    ['1 march', ['cash', 'machinery', 'furniture'], ['capital', 'creditors'], [100000, 30000, 10000], [130000, 10000], ['1', '2', '3'], ['4', '5'], 'being cash, machinery and furniture introduced'],
+    ['1 march', ['purchases'], ['cash'], [16000], [16000], ['6'], ['7'], 'being goods purchased'],
+    ['1 march', ['purchases'], ['cash'], [17000], [17000], ['8'], ['9'], 'being goods purchased'],
+    ['2 march', ['purchases'], ['amit'], [24000], [24000], ['10'], ['11'], 'being goods purchased on credit'],
+    ['5 march', ['purchases'], ['cash'], [35000], [35000], ['12'], ['13'], 'being goods purchased'],
+    ['10 march', ['amit'], ['purchase returns'], [8000], [8000], ['14'], ['15'], 'being goods returned by Amit'],
+    ['11 march', ['bank'], ['sales'], [36000], [36000], ['16'], ['17'], 'being goods sold and bank increased'],
+    ['13 march', ['cash'], ['sales'], [27000], [27000], ['18'], ['19'], 'being goods sold'],
+    ['15 march', ['pawan'], ['sales'], [18000], [18000], ['20'], ['21'], 'being goods sold on credit'],
+    ['19 march', ['yamini'], ['sales'], [23000], [23000], ['22'], ['23'], 'being goods sold on credit'],
+    ['22 march', ['bhupesh'], ['cash'], [10800], [10800], ['24'], ['25'], 'being payment made to Bhupesh'],
+    ['23 march', ['bank'], ['sales'], [47000], [47000], ['26'], ['27'], 'being goods sold and bank increased'],
+    ['23 march', ['sales returns'], ['aman'], [9000], [9000], ['28'], ['29'], 'being goods returned by Aman']
+]
+}
