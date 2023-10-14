@@ -1,28 +1,29 @@
 import pandas as pd
 import json
 import os
+import subprocess
 
-def read_journals(path):
-    while not os.path.exists(path):
+def read_journals(project_name):
+    while not os.path.exists(project_name):
         path = input("That file does not exist. Try again: ")
-    with open(path, "r") as file:
+    with open(f"{project_name}\{project_name}_entries.json", "r") as file:
         return json.load(file)
 
-def write_journals(path, entries):
-    with open(path, "w") as file:
+def write_journals(project_name, entries):
+    with open(f"{project_name}\{project_name}_entries.json", "w") as file:
         json.dump(entries, file)
 
-def create_database(filename):
-    if not os.path.exists(filename):
-        year = input("Current year: ")
-        empty = {"entries": [[year]]}
-        with open(f"{filename}_entries.json", "w") as file:
+def create_project(name):
+    if not os.path.exists(name):
+        empty = {"entries": []}
+        os.mkdir(name)
+        with open(f"{name}\{name}_entries.json", "w") as file:
             json.dump(empty, file)
-        print(f"Made entries database with {filename}_entries.json name.")
+        print(f"Made project with {name} name. An entries file was made in that folder with {name}_entries.json name.")
     else:
-        print("File with that name exists. Supply unique name or delete that file.")
+        print("Project with that name exists. Supply unique name or delete that project.")
 
-def add_entry(file):
+def add_entry(project_name):
     add_date = input("Enter date of transaction: ")
     add_debit = input("Enter debited account names. Separate with comma if more than one: ")
     add_credit = input("Enter credited account names. Separate with comma if more than one: ")
@@ -37,15 +38,15 @@ def add_entry(file):
     credit_amounts = [element.strip() for element in add_credit_amt.split(",")]
     debit_folios = [element.strip() for element in add_debit_folio.split(",")]
     credit_folios = [element.strip() for element in add_credit_folio.split(",")]
-    journals_data = read_journals(file)
+    journals_data = read_journals(project_name)
     entry = [add_date, debit_accounts, credit_accounts, debit_amounts, credit_amounts, debit_folios, credit_folios, add_narration]
     journals_data["entries"].append(entry)
     print("The following entry was added:")
     print(f"{add_date}\t{debit_accounts}\t\t\t{debit_folios}\t{debit_amounts}\n\t\t\t{credit_accounts}\t\t\t{credit_folios}\t{credit_amounts}\n{add_narration}")
-    write_journals(file, journals_data)
+    write_journals(project_name, journals_data)
 
-def print_journals(file_name, path):
-    journals_data = read_journals(path)
+def print_journals(project_name):
+    journals_data = read_journals(project_name)
     print(journals_data)
     journal_commands = "%%%%%%%%%%%%%%%%%%%%%%\n% JOURNAL ENTRIES\n%%%%%%%%%%%%%%%%%%%%%%\n\n\journal{\n\n"
     for entry in journals_data["entries"]:
@@ -63,5 +64,21 @@ def print_journals(file_name, path):
                     journal_commands = journal_commands + f"\t\jcr{{{entry[2][i].title()}}}{{{entry[6][i]}}}{{{entry[4][i]}}}\n"
             journal_commands = journal_commands + f"\t\jnar{{{entry[7]}}}\n\n"
     journal_commands = journal_commands + "}"
-    with open(f"{file_name}_journal.tex", "w") as file:
+    with open(f"{project_name}\{project_name}_journal.tex", "w") as file:
         file.write(journal_commands)
+
+def print_ledgers(project_name):
+    ledger_commands = "%%%%%%%%%%%%%%%%%%%%%%\n% LEDGER ENTRIES\n%%%%%%%%%%%%%%%%%%%%%%\n\n"
+    with open(f"{project_name}\{project_name}_ledger.tex", "w") as file:
+        file.write(ledger_commands)
+        
+def fabricate(project_name):
+    main_commands = f"% This is {project_name}_main.tex fabricated using https://github.com/zplus11/Bookkeeping-LaTeX.git\n"
+    main_commands += f"\input{{preamble.tex}}\n\n"
+    main_commands += f"\\begin{{document}}\n\t\\begin{{center}}\n\t\t{{\Huge Bookkeeping with \LaTeX}}\\\\[5pt]{{\LARGE Automation with Python}}\n\t\end{{center}}\n"
+    main_commands += f"\t\section{{Journal}}\n\t\include{{{project_name}/{project_name}_journal.tex}}\n"
+    main_commands += f"\t\section{{Ledger Posting}}\n\t\include{{{project_name}/{project_name}_ledger.tex}}\n"
+    main_commands += f"\end{{document}}"
+    with open(f"{project_name}\{project_name}_main.tex", "w") as file:
+        file.write(main_commands)
+    subprocess.run(['pdflatex', f"{project_name}\{project_name}_main.tex"])

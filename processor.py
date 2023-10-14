@@ -1,14 +1,14 @@
 from functions import *
 
-jpath = input("Supply path of the entries file. Enter ""new"" to create a new database.\n")
+pname = input("Supply name of the project. Enter ""new"" to create a new project.\n")
 
-if jpath.lower().strip() == "new":
-    name = input("Enter (unique) name for entries file: ")
-    create_database(name)
-    name = name + "_entries.json"
-    jpath = name
+if pname.lower().strip() == "new":
+    nname = input("Enter (unique) name for your project: ")
+    create_project(nname)
+    nname
+    jpath = nname + "/" + nname + "_entries.json"
 else:
-    journals_data = read_journals(jpath)
+    journals_data = read_journals(pname)
     print(f"Loaded the data from given path.")
    
 print("____________E_D_I_T_O_R____________")
@@ -17,14 +17,13 @@ print("Available options:\n1) add entry, x) close editor")
 ech = input("Enter your choice: ").lower().strip()
 while ech != "x":
     if ech == "1":
-        journals_data = read_journals(jpath)
-        add_entry(jpath)
+        journals_data = read_journals(pname)
+        add_entry(pname)
     else:
         print("Invalid choice.")
     ech = input("Enter your next choice: ").lower().strip()
 
 print("____________C_O_M_P_I_L_E_R____________")
-name = input("Enter below the name in which you want your files saved. If the files are already existing then supply the same name.\n").strip()
-print_journals(name, jpath)
-    
-    
+print_journals(pname)
+print_ledgers(pname)
+fabricate(pname)
