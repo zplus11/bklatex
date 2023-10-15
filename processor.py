@@ -3,10 +3,8 @@ from functions import *
 pname = input("Supply name of the project. Enter ""new"" to create a new project.\n")
 
 if pname.lower().strip() == "new":
-    nname = input("Enter (unique) name for your project: ")
-    create_project(nname)
-    nname
-    jpath = nname + "/" + nname + "_entries.json"
+    pname = input("Enter (unique) name for your project: ")
+    create_project(pname)
 else:
     journals_data = read_journals(pname)
     print(f"Loaded the data from given path.")
@@ -17,7 +15,8 @@ print("Available options:\n1) add entry, x) close editor")
 ech = input("Enter your choice: ").lower().strip()
 while ech != "x":
     if ech == "1":
-        journals_data = read_journals(pname)
+        start_year(pname)
+    elif ech == "2":
         add_entry(pname)
     else:
         print("Invalid choice.")
