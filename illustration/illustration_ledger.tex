@@ -1,22 +1,24 @@
+% This is illustration_ledger.tex printed using https://github.com/zplus11/Bookkeeping-LaTeX.git
+
 %%%%%%%%%%%%%%%%%%%%%%
 % LEDGER ENTRIES
 %%%%%%%%%%%%%%%%%%%%%%
 
-% CASH ACCOUNT 
-\ledger{Cash a/c}{
+% FURNITURE ACCOUNT 
+\ledger{Furniture a/c}{
 	\lyear{2023}
-	\ldr{15 Oct}{Capital}{1000000}{1}
+	\ldr{20 Oct}{Cash}{5000}{5}
 	\mt
 }{
 	\lyear{2023}
-	\lcr{15 Oct}{Machinery}{20000}{4}
+	\mt
 	\mt
 }
 
-% MACHINERY ACCOUNT 
-\ledger{Machinery a/c}{
+% PURCHASES ACCOUNT 
+\ledger{Purchases a/c}{
 	\lyear{2023}
-	\ldr{15 Oct}{Cash}{20000}{3}
+	\ldr{20 Oct}{Cash}{1000}{5}
 	\mt
 }{
 	\lyear{2023}
@@ -32,6 +34,31 @@
 }{
 	\lyear{2023}
 	\lcr{15 Oct}{Cash}{1000000}{2}
+	\mt
+}
+
+% MACHINERY ACCOUNT 
+\ledger{Machinery a/c}{
+	\lyear{2023}
+	\ldr{15 Oct}{Cash}{20000}{3}
+	\ldr{20 Oct}{Cash}{10000}{5}
+	\mt
+}{
+	\lyear{2023}
+	\mt\mt
+	\mt
+}
+
+% CASH ACCOUNT 
+\ledger{Cash a/c}{
+	\lyear{2023}
+	\ldr{15 Oct}{Capital}{1000000}{1}
+	\mt
+	\mt
+}{
+	\lyear{2023}
+	\lcr{15 Oct}{Machinery}{20000}{4}
+	\lcr{20 Oct}{Machinery}{16000}{8}
 	\mt
 }
 
