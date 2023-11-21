@@ -10,7 +10,6 @@ def read_journals(project_name):
     with open(f"{project_name}\{project_name}_entries.json", "r") as file:
         entries_file = json.load(file)
     return entries_file["entries"]
-    print(entries_file)
 
 def write_journals(project_name, entries):
     with open(f"{project_name}\{project_name}_entries.json", "w") as file:
@@ -31,6 +30,12 @@ def start_year(project_name):
     journals_data = read_journals(project_name)
     journals_data.append([f"{year}"])
     write_journals(project_name, journals_data)
+
+def print_entry(entry):
+    if len(entry) == 1:
+        print(entry)
+    else:
+        print(f"{entry[0].title()}\t{entry[1][0].title()} ...\t{entry[2][0].title()} ...\t{entry[7][:25]}")
     
 def add_entry(project_name):
     add_date = input("Enter date of transaction: ")
@@ -52,15 +57,56 @@ def add_entry(project_name):
     entry = [add_date, debit_accounts, credit_accounts, debit_amounts, credit_amounts, debit_folios, credit_folios, add_narration]
     journals_data.append(entry)
     print("The following entry was added:")
-    print(f"{add_date}\t{debit_accounts}\t\t\t{debit_folios}\t{debit_amounts}\n\t\t\t{credit_accounts}\t\t\t{credit_folios}\t{credit_amounts}\n{add_narration}")
+    print_entry(entry)
     write_journals(project_name, journals_data)
+
+def edit_entry(project_name):
+    edit_number = input("Enter the serial number of that entry (starting with 1): ")
+    journals_data = read_journals(project_name)
+    if edit_number.isdigit() and int(edit_number) > 0:
+        if len(journals_data[int(edit_number) - 1]) == 1:
+            year = input("Enter the year to replace it with: ")
+            updated = [f"{year}"]
+        else:
+            add_date = input("Enter new date of transaction: ")
+            add_debit = input("Enter new debited account names. Separate with comma if more than one: ").lower()
+            add_credit = input("Enter new credited account names. Separate with comma if more than one: ").lower()
+            add_debit_amt = input("Add debited amounts in same order of accounts. Separate with comma: ")
+            add_credit_amt = input("Add credited amounts in same order of accounts. Separate with comma: ")
+            add_debit_folio = input("Add folio numbers for debit accounts. Enter none if NA. Separate with comma: ")
+            add_credit_folio = input("Add folio numbers for credit accounts. Enter none if NA. Separate with comma: ")
+            add_narration = input("Add narration: ")
+            add_narration = "being " + add_narration
+            debit_accounts = [element.strip() for element in add_debit.split(",")]
+            credit_accounts = [element.strip() for element in add_credit.split(",")]
+            debit_amounts = [element.strip() for element in add_debit_amt.split(",")]
+            credit_amounts = [element.strip() for element in add_credit_amt.split(",")]
+            debit_folios = [element.strip() for element in add_debit_folio.split(",")]
+            credit_folios = [element.strip() for element in add_credit_folio.split(",")]
+            updated = [add_date, debit_accounts, credit_accounts, debit_amounts, credit_amounts, debit_folios, credit_folios, add_narration]
+    try:
+        journals_data[int(edit_number) - 1] = updated
+        print("Successfully updated the entry to following:")
+        print_entry(updated)
+        write_journals(project_name, journals_data)
+    except Exception as e:
+        print("Issue encountered.", e)
+
+def delete_entry(project_name):
+    journals_data = read_journals(project_name)
+    number = input("Enter the serial number of entry to remove (starting with 1): ")
+    if number.isdigit() and int(number) > 0:
+        try:
+            del journals_data[int(number) - 1]
+            write_journals(project_name, journals_data)
+            print("Successfully removed the given entry.")
+        except Exception as e:
+            print("Issue encountered.", e)
 
 def print_journals(project_name):
     journals_data = read_journals(project_name)
-    print(journals_data)
     journal_commands = f"% This is {project_name}_journal.tex printed using https://github.com/zplus11/Bookkeeping-LaTeX.git\n\n%%%%%%%%%%%%%%%%%%%%%%\n% JOURNAL ENTRIES\n%%%%%%%%%%%%%%%%%%%%%%\n\n\journal{{\n\n"
     for entry in journals_data:
-        print(entry)
         if len(entry) == 1:
             journal_commands = journal_commands + f"\t\jyear{{{entry[0]}}}\n\n"
         else:
