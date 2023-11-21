@@ -2,7 +2,6 @@ import pandas as pd
 import json
 import os
 import subprocess
-from time import sleep
 
 def read_journals(project_name):
     while not os.path.exists(project_name):

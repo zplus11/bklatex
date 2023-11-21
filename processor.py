@@ -1,5 +1,4 @@
 from functions import *
-from time import sleep
 
 pname = input("Supply name of the project. Enter ""new"" to create a new project.\n")
 
