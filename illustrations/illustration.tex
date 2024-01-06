@@ -19,22 +19,19 @@
 		\jcr{Capital}{2}{500000}
 		\jnar{being capital introduced}
 
-		\jdr{29 Dec}{Bank}{3}{200000}
-		\jcr{Cash}{4}{200000}
+		\jdr{29 Dec}{Bank}{3}{100000}
+		\jcr{Cash}{4}{100000}
 		\jnar{being cash deposited into bank}
 
-		\jdr{30 Dec}{Furniture}{}{20000}
-		\jdr{}{Computers}{}{10000}
-		\jdr{}{Purchases}{}{20000}
-		\jcr{Bank}{}{50000}
-		\jnar{being furniture, computers and stock purchased}
+		\jdr{29 Dec}{Furniture}{5}{50000}
+		\jcr{Cash}{6}{50000}
+		\jnar{being furniture bought}
 
 		\jyear{2024}
 
-		\jdr{1 Jan}{Cash}{9}{30000}
-		\jdr{}{Bank}{10}{120000}
-		\jcr{Sales}{11}{150000}
-		\jnar{being sales made to bank and cash}
+		\jdr{5 Jan}{Cash}{7}{50000}
+		\jcr{Bank}{8}{50000}
+		\jnar{being cash withdrawn from bank}
 
 	}
 
@@ -44,65 +41,105 @@
 
 	Ledger posting: W.I.P.
 
-	% COMPUTERS ACCOUNT 
-	\ledger{Computers a/c}{
-		\ldr{30 Dec}{Bank}{10000}{}
-		\mt
-}{
-		\mt		\mt
-}
-
-	% CASH ACCOUNT 
-	\ledger{Cash a/c}{
-		\ldr{29 Dec}{Capital}{500000}{1}
-		\ldr{1 Jan}{Sales}{30000}{9}
-		\mt
-}{
-		\lcr{29 Dec}{Bank}{200000}{4}
-		\mt		\mt
-}
-
 	% FURNITURE ACCOUNT 
 	\ledger{Furniture a/c}{
-		\ldr{30 Dec}{Bank}{20000}{}
+		\tobalbd{1 Dec}{0}
+		\ldr{29 Dec}{Cash}{50000}{5}
+\mt
+				\total{50000}
 		\mt
-}{
-		\mt		\mt
-}
+		\tobalbd{1 Jan}{50000}
+\mt
+				\total{50000}
+		\mt
 
-	% BANK ACCOUNT 
-	\ledger{Bank a/c}{
-		\ldr{29 Dec}{Cash}{200000}{3}
-		\ldr{1 Jan}{Sales}{120000}{9}
+	}{
+		\bybalcd{30 Dec}{50000}
+\mt
+		\mt		\total{50000}
 		\mt
-}{
-		\lcr{30 Dec}{Furniture}{50000}{}
-		\mt		\mt
-}
-
-	% PURCHASES ACCOUNT 
-	\ledger{Purchases a/c}{
-		\ldr{30 Dec}{Bank}{20000}{}
+		\bybalcd{30 Jan}{50000}
+\mt
+				\total{50000}
 		\mt
-}{
-		\mt		\mt
-}
+		
+	}
 
 	% CAPITAL ACCOUNT 
 	\ledger{Capital a/c}{
-		\mt		\mt
-}{
-		\lcr{29 Dec}{Cash}{500000}{2}
+		\tobalbd{1 Dec}{0}
+\mt
+		\mt		\total{0}
 		\mt
-}
+		\tobalbd{1 Jan}{-500000}
+\mt
+				\total{-500000}
+		\mt
 
-	% SALES ACCOUNT 
-	\ledger{Sales a/c}{
-		\mt		\mt
-}{
-		\lcr{1 Jan}{Cash}{150000}{11}
+	}{
+		\lcr{29 Dec}{Cash}{500000}{2}
+		\bybalcd{30 Dec}{-500000}
+\mt
+				\total{0}
 		\mt
-}
+		\bybalcd{30 Jan}{-500000}
+\mt
+				\total{-500000}
+		\mt
+		
+	}
+
+	% BANK ACCOUNT 
+	\ledger{Bank a/c}{
+		\tobalbd{1 Dec}{0}
+		\ldr{29 Dec}{Cash}{100000}{3}
+\mt
+				\total{100000}
+		\mt
+		\tobalbd{1 Jan}{100000}
+\mt
+		\mt		\total{100000}
+		\mt
+
+	}{
+		\bybalcd{30 Dec}{100000}
+\mt
+		\mt		\total{100000}
+		\mt
+		\lcr{5 Jan}{Cash}{50000}{8}
+		\bybalcd{30 Jan}{50000}
+\mt
+				\total{100000}
+		\mt
+		
+	}
+
+	% CASH ACCOUNT 
+	\ledger{Cash a/c}{
+		\tobalbd{1 Dec}{0}
+		\ldr{29 Dec}{Capital}{500000}{1}
+\mt
+		\mt		\total{500000}
+		\mt
+		\tobalbd{1 Jan}{350000}
+		\ldr{5 Jan}{Bank}{50000}{7}
+\mt
+				\total{400000}
+		\mt
+
+	}{
+		\lcr{29 Dec}{Bank}{100000}{4}
+		\lcr{29 Dec}{Furniture}{50000}{6}
+		\bybalcd{30 Dec}{350000}
+\mt
+				\total{500000}
+		\mt
+		\bybalcd{30 Jan}{400000}
+\mt
+		\mt		\total{400000}
+		\mt
+		
+	}
 
 \end{document}
 % End of file.

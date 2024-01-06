@@ -20,31 +20,32 @@ dec.entry(
     date = "29",
     debit_accounts = ["Bank"],
     credit_accounts = ["Cash"],
-    debit_amounts = [200000],
-    credit_amounts = [200000],
+    debit_amounts = [100000],
+    credit_amounts = [100000],
     debit_folios = ["3"],
     credit_folios = ["4"],
     narration = "being cash deposited into bank"
 )
 dec.entry(
-    "30",
-    ["Furniture", "Computers", "Purchases"],
-    ["Bank"],
-    [20000, 10000, 20000],
-    [50000],
-    narration = "being furniture, computers and stock purchased"
+    date = "29",
+    debit_accounts = ["Furniture"],
+    credit_accounts = ["Cash"],
+    debit_amounts = [50000],
+    credit_amounts = [50000],
+    debit_folios = ["5"],
+    credit_folios = ["6"],
+    narration = "being furniture bought"
 )
-
 jan = month(acc, "January", "2024")
 jan.entry(
-    "1",
-    ["Cash", "Bank"],
-    ["Sales"],
-    [30000, 120000],
-    [150000],
-    ["9", "10"],
-    ["11"],
-    "being sales made to bank and cash"
+    date = "5",
+    debit_accounts = ["Cash"],
+    credit_accounts = ["Bank"],
+    debit_amounts = [50000],
+    credit_amounts = [50000],
+    debit_folios = ["7"],
+    credit_folios = ["8"],
+    narration = "being cash withdrawn from bank"
 )
-    
+
 acc.make_pdf(keep_tex = True)

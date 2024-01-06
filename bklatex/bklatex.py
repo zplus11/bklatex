@@ -8,13 +8,13 @@ class account:
         self.file_name = file_name
         self.company_name = company_name
         self.year = year
-
-        self.database = {}
         self.cwd = os.path.dirname(os.path.realpath(__file__))
+        self.database = {}
+        self.credit_natures = []
 
     def make_pdf(self, journals: bool = True, ledgers: bool = True, keep_tex: bool = False):
         tex_name = self.file_name + ".tex"
-        com = compiler(tex_name, self.cwd, self.database, self.company_name, self.year)
+        com = compiler(tex_name, self.cwd, self.database, self.company_name, self.year, self.credit_natures)
         com.open_tex()
         if journals == True:
             com.write_journals()
@@ -24,6 +24,9 @@ class account:
         
         com.fabricate(keep_tex)
 
+    def set_credit(self, accounts: list):
+        self.credit_natures = accounts
+        
 
 class month:
     def __init__(self, acc, month, year):
@@ -32,6 +35,13 @@ class month:
         self.entries = acc.database[(month, year)]
         self.month = month
         self.year = year
+
+    def clean(self, string):
+        cleaned = ""
+        for i in string:
+            if i in r"&%$#_{}~\\^": cleaned += fr"\{i}"
+            else: cleaned += i
+        return cleaned
         
     def entry(
         self,
@@ -47,14 +57,14 @@ class month:
         if not len(debit_folios): debit_folios = [""]*len(debit_accounts)
         if not len(credit_folios): credit_folios = [""]*len(credit_accounts)
         constituted = [
-            date, 
-            debit_accounts,
-            credit_accounts,
+            self.clean(date), 
+            [self.clean(name) for name in debit_accounts],
+            [self.clean(name) for name in credit_accounts],
             debit_amounts,
             credit_amounts,
             debit_folios,
             credit_folios,
-            narration
+            self.clean(narration)
         ]
         bool1 = (len(constituted[1]) == len(constituted[3]) and (len(constituted[5]) == len(constituted[3]) or not len(constituted[5]))) and (len(constituted[2]) == len(constituted[4]) and (len(constituted[6]) == len(constituted[4]) or not len(constituted[6])))
         bool2 = all(constituted[i][j] > 0 for i in [3, 4] for j in range(len(constituted[i])))
@@ -63,14 +73,14 @@ class month:
         
         self.entries.append(constituted)
 
-
 class compiler:
-    def __init__(self, file_name, cwd, database, company_name, year):
+    def __init__(self, file_name, cwd, database, company_name, year, credit_natures):
         self.file_name = file_name
         self.cwd = cwd
         self.database = database
         self.company_name = company_name
         self.year = year
+        self.credit_natures = credit_natures
         
     def open_tex(self):
         cwd = self.cwd.replace("\\", "/")
@@ -108,6 +118,8 @@ class compiler:
         print("[2]", end = " ")
         
     def write_ledgers(self):
+        global unique_accounts, accounts
+        
         ledger_commands = f"\t%%%%%%%%%%%%%%%%%%%%%%\n\t% LEDGER POSTING\n\t%%%%%%%%%%%%%%%%%%%%%%\n\n\tLedger posting: W.I.P.\n\n"
         
         unique_accounts = set()
@@ -118,9 +130,13 @@ class compiler:
                 for cacc in entry[2]:
                     unique_accounts.add(cacc)
         
-        accounts = {monthlog[0]: {account: {"debit": [], "credit": []} for account in unique_accounts} for monthlog in self.database}
-        print(accounts)
+        accounts = {monthlog[0]: {account: {"nature": "d", "opening": 0, "debit": [], "credit": [], "closing": 0} for account in unique_accounts} for monthlog in self.database}
 
+        for account in self.credit_natures:
+            if account in unique_accounts:
+                for monthlog in self.database:
+                    accounts[monthlog[0]][account]["nature"] = "c"
+                    
         '''
         --- self.database ---
         {
@@ -136,42 +152,87 @@ class compiler:
         
         for account in unique_accounts:
             for monthlog in self.database:
+                index = list(self.database).index(monthlog)
+                accounts[monthlog[0]][account]["closing"] = accounts[monthlog[0]][account]["opening"]
                 for entry in self.database[monthlog]:
                     for i in range(len(entry[1])):
                         if account == entry[1][i]:
                             accounts[monthlog[0]][account]["debit"].append([entry[0], entry[2], entry[3][i], entry[5]])
+                            accounts[monthlog[0]][account]["closing"] += entry[3][i]
+                    
                     for i in range(len(entry[2])):
                         if account == entry[2][i]:
                             accounts[monthlog[0]][account]["credit"].append([entry[0], entry[1], entry[4][i], entry[6]])
+                            accounts[monthlog[0]][account]["closing"] -= entry[4][i]
+                if index < len(self.database) - 1:
+                    accounts[list(self.database)[index + 1][0]][account]["opening"] = accounts[monthlog[0]][account]["closing"]
 
+        print(accounts)
                             
         for account in unique_accounts:
-            ld = sum([len(accounts[month][account]["debit"]) for month in accounts])
-            lc = sum([len(accounts[month][account]["credit"]) for month in accounts])
             ledger_commands += f"\t% {account.upper()} ACCOUNT \n"
             ledger_commands += f"\t\\ledger{{{account.title()} a/c}}{{\n"
+
             for month in accounts:
+                ld = len(accounts[month][account]["debit"])
+                lc = len(accounts[month][account]["credit"])
+                nature = accounts[month][account]["nature"]
+
+                opening_balance = accounts[month][account]["opening"]
+                closing_balance = accounts[month][account]["closing"]
+                
+                if nature == "d":
+                    ledger_commands += f"\t\t\\tobalbd{{1 {month[0:3]}}}{{{opening_balance}}}\n"
+
                 for entry in accounts[month][account]["debit"]:
                     ledger_commands += f"\t\t\\ldr{{{entry[0] + " " + month[0:3].title()}}}{{{entry[1][0].title()}}}{{{entry[2]}}}{{{entry[3][0]}}}\n"
-            ledger_commands += "\t\t\\mt"
-            if ld < lc:
-                for i in range(lc - ld):
-                    ledger_commands += "\t\t\\mt"
-            ledger_commands += "\n}{\n"
+
+                if nature == "c":
+                    ledger_commands += f"\t\t\\tobalcd{{30 {month[0:3]}}}{{{closing_balance}}}\n"
+
+                ledger_commands += "\\mt\n\t\t"
+                if ld < lc:
+                    for i in range(lc - ld):
+                        ledger_commands += "\\mt"
+                        
+                total_amt = opening_balance + sum([accounts[month][account]["debit"][i][2] for i in range(ld)])
+                ledger_commands += f"\t\t\\total{{{total_amt}}}\n\t\t\\mt\n"
+                        
+            ledger_commands += "\n\t}{\n"
+            
             for month in accounts:
+                ld = len(accounts[month][account]["debit"])
+                lc = len(accounts[month][account]["credit"])
+                nature = accounts[month][account]["nature"]
+
+                opening_balance = accounts[month][account]["opening"]
+                closing_balance = accounts[month][account]["closing"]
+                
+                if nature == "c":
+                    ledger_commands += f"\t\t\\bybalbd{{1 {month[0:3]}}}{{{opening_balance}}}\n"
+                    
                 for entry in accounts[month][account]["credit"]:
                     ledger_commands += f"\t\t\\lcr{{{entry[0] + " " + month[0:3].title()}}}{{{entry[1][0].title()}}}{{{entry[2]}}}{{{entry[3][0]}}}\n"
-            if lc < ld:
-                for i in range(ld - lc):
-                    ledger_commands += "\t\t\\mt"
-            ledger_commands += "\t\t\\mt\n}\n\n"
+
+                if nature == "d":
+                    ledger_commands += f"\t\t\\bybalcd{{30 {month[0:3]}}}{{{closing_balance}}}\n"
+
+                ledger_commands += "\\mt\n\t\t"
+                if lc < ld:
+                    for i in range(ld - lc):
+                        ledger_commands += "\\mt"
+                        
+                total_amt = closing_balance + sum([accounts[month][account]["credit"][i][2] for i in range(lc)])
+                ledger_commands += f"\t\t\\total{{{total_amt}}}\n\t\t\\mt\n"
             
+            ledger_commands += "\t\t\n\t}\n\n"
+
+        print(accounts)
 
         with open(self.file_name, "a") as file:
             file.write(ledger_commands)
             
         print("[3]", end = " ")
-        
         
     def close_tex(self):
         compiler_commands = f"\\end{{document}}\n% End of file."
@@ -202,7 +263,3 @@ class compiler:
         os.remove(self.file_name[:-4] + ".aux")
         os.remove(self.file_name[:-4] + ".log")
         os.remove(self.file_name[:-4] + ".out")
-
-    def clean_for_tex(self, string):
-        new_string = ""
-        pass            
