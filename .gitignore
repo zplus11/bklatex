@@ -1,0 +1,10 @@
+.git/
+setup.py
+
+bklatex/__pycache__/
+bklatex/__init__.py
+
+documentation/bklatex_docs.aux
+documentation/bklatex_docs.log
+documentation/bklatex_docs.synctex.gz
+documentation/bklatex_docs.toc

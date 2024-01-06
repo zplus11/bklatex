@@ -1,0 +1,108 @@
+% This is illustration.tex.tex printed using https://github.com/zplus11/Bookkeeping-LaTeX.git
+
+\input{D:/python/accountancy/bklatex/preamble.tex}
+\title{Bookkeeping with \LaTeX}
+\date{\today}
+
+\begin{document}
+	\maketitle
+
+	%%%%%%%%%%%%%%%%%%%%%%
+	% JOURNAL ENTRIES
+	%%%%%%%%%%%%%%%%%%%%%%
+
+	\journal{That Company Pvt. Ltd.}{2024}{
+
+		\jyear{2023}
+
+		\jdr{29 Dec}{Cash}{1}{500000}
+		\jcr{Capital}{2}{500000}
+		\jnar{being capital introduced}
+
+		\jdr{29 Dec}{Bank}{3}{200000}
+		\jcr{Cash}{4}{200000}
+		\jnar{being cash deposited into bank}
+
+		\jdr{30 Dec}{Furniture}{}{20000}
+		\jdr{}{Computers}{}{10000}
+		\jdr{}{Purchases}{}{20000}
+		\jcr{Bank}{}{50000}
+		\jnar{being furniture, computers and stock purchased}
+
+		\jyear{2024}
+
+		\jdr{1 Jan}{Cash}{9}{30000}
+		\jdr{}{Bank}{10}{120000}
+		\jcr{Sales}{11}{150000}
+		\jnar{being sales made to bank and cash}
+
+	}
+
+	%%%%%%%%%%%%%%%%%%%%%%
+	% LEDGER POSTING
+	%%%%%%%%%%%%%%%%%%%%%%
+
+	Ledger posting: W.I.P.
+
+	% COMPUTERS ACCOUNT 
+	\ledger{Computers a/c}{
+		\ldr{30 Dec}{Bank}{10000}{}
+		\mt
+}{
+		\mt		\mt
+}
+
+	% CASH ACCOUNT 
+	\ledger{Cash a/c}{
+		\ldr{29 Dec}{Capital}{500000}{1}
+		\ldr{1 Jan}{Sales}{30000}{9}
+		\mt
+}{
+		\lcr{29 Dec}{Bank}{200000}{4}
+		\mt		\mt
+}
+
+	% FURNITURE ACCOUNT 
+	\ledger{Furniture a/c}{
+		\ldr{30 Dec}{Bank}{20000}{}
+		\mt
+}{
+		\mt		\mt
+}
+
+	% BANK ACCOUNT 
+	\ledger{Bank a/c}{
+		\ldr{29 Dec}{Cash}{200000}{3}
+		\ldr{1 Jan}{Sales}{120000}{9}
+		\mt
+}{
+		\lcr{30 Dec}{Furniture}{50000}{}
+		\mt		\mt
+}
+
+	% PURCHASES ACCOUNT 
+	\ledger{Purchases a/c}{
+		\ldr{30 Dec}{Bank}{20000}{}
+		\mt
+}{
+		\mt		\mt
+}
+
+	% CAPITAL ACCOUNT 
+	\ledger{Capital a/c}{
+		\mt		\mt
+}{
+		\lcr{29 Dec}{Cash}{500000}{2}
+		\mt
+}
+
+	% SALES ACCOUNT 
+	\ledger{Sales a/c}{
+		\mt		\mt
+}{
+		\lcr{1 Jan}{Cash}{150000}{11}
+		\mt
+}
+
+\end{document}
+% End of file.
