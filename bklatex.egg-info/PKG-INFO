@@ -1,3 +1,15 @@
+Metadata-Version: 2.1
+Name: bklatex
+Version: 0.0.1
+Summary: Typeset accounting journals and ledgers with Python & LaTeX
+Author: Naman Taggar
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: Windows
+Requires-Python: >3.5
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
 # bklatex
 Typeset accounting journals and ledgers with LaTeX easily using this python library.
 

@@ -1,77 +1,6 @@
 import os
-import pandas as pd
 import subprocess
 
-
-class account:
-    def __init__(self, file_name: str, company_name: str = "", year: str = ""):
-        self.file_name = file_name
-        self.company_name = company_name
-        self.year = year
-        self.cwd = os.path.dirname(os.path.realpath(__file__))
-        self.database = {}
-        self.credit_natures = []
-
-    def make_pdf(self, journals: bool = True, ledgers: bool = True, keep_tex: bool = False):
-        tex_name = self.file_name + ".tex"
-        com = compiler(tex_name, self.cwd, self.database, self.company_name, self.year, self.credit_natures)
-        com.open_tex()
-        if journals == True:
-            com.write_journals()
-        if ledgers == True:
-            com.write_ledgers()
-        com.close_tex()
-        
-        com.fabricate(keep_tex)
-
-    def set_credit(self, accounts: list):
-        self.credit_natures = accounts
-        
-
-class month:
-    def __init__(self, acc, month, year):
-        assert isinstance(acc, account), f"{account} is not an account class object"
-        acc.database[(month, year)] = []
-        self.entries = acc.database[(month, year)]
-        self.month = month
-        self.year = year
-
-    def clean(self, string):
-        cleaned = ""
-        for i in string:
-            if i in r"&%$#_{}~\\^": cleaned += fr"\{i}"
-            else: cleaned += i
-        return cleaned
-        
-    def entry(
-        self,
-        date: str = "1",
-        debit_accounts: list = ["cash"],
-        credit_accounts: list = ["capital"],
-        debit_amounts: list = [100000],
-        credit_amounts: list = [100000],
-        debit_folios: list = [],
-        credit_folios: list = [],
-        narration: str = "being capital introduced"
-    ):
-        if not len(debit_folios): debit_folios = [""]*len(debit_accounts)
-        if not len(credit_folios): credit_folios = [""]*len(credit_accounts)
-        constituted = [
-            self.clean(date), 
-            [self.clean(name) for name in debit_accounts],
-            [self.clean(name) for name in credit_accounts],
-            debit_amounts,
-            credit_amounts,
-            debit_folios,
-            credit_folios,
-            self.clean(narration)
-        ]
-        bool1 = (len(constituted[1]) == len(constituted[3]) and (len(constituted[5]) == len(constituted[3]) or not len(constituted[5]))) and (len(constituted[2]) == len(constituted[4]) and (len(constituted[6]) == len(constituted[4]) or not len(constituted[6])))
-        bool2 = all(constituted[i][j] > 0 for i in [3, 4] for j in range(len(constituted[i])))
-        assert bool2, "Debit or credit amounts were not integer values."
-        assert all(isinstance(constituted[i], list) for i in [1, 2, 3, 4]) and bool1, "Ensure debit (credit) accounts, amounts and folios are in lists and have equal lengths."
-        
-        self.entries.append(constituted)
 
 class compiler:
     def __init__(self, file_name, cwd, database, company_name, year, credit_natures):
@@ -100,6 +29,7 @@ class compiler:
         for month in self.database:
             if month[1] != current_year:
                 journal_commands += f"\t\t\\jyear{{{month[1]}}}\n\n"
+                current_year = month[1]
             for entry in self.database[month]:
                 journal_commands += f"\t\t\\jdr{{{entry[0].title() + " " + month[0][0:3]}}}{{{entry[1][0].title()}}}{{{entry[5][0]}}}{{{entry[3][0]}}}\n"
                 if len(entry[1]) > 1:
@@ -136,19 +66,6 @@ class compiler:
             if account in unique_accounts:
                 for monthlog in self.database:
                     accounts[monthlog[0]][account]["nature"] = "c"
-                    
-        '''
-        --- self.database ---
-        {
-            ('December', '2023'): [
-                ['29', ['Cash'], ['Capital'], [500000], [500000], ['1'], ['2'], 'being capital introduced'],
-                ['29', ['Bank'], ['Cash'], [200000], [200000], ['3'], ['4'], 'being cash deposited into bank'],
-                ['30', ['Furniture', 'Computers', 'Purchases'], ['Bank'], [20000, 10000, 20000], [50000], ['', '', ''], [''], 'being furniture, computers and stock purchased']
-            ], ('January', '2024'): [
-                ['1', ['Cash', 'Bank'], ['Sales'], [30000, 120000], [150000], ['9', '10'], ['11'], 'being sales made to bank and cash']
-            ]
-        }
-        '''
         
         for account in unique_accounts:
             for monthlog in self.database:
@@ -166,8 +83,6 @@ class compiler:
                             accounts[monthlog[0]][account]["closing"] -= entry[4][i]
                 if index < len(self.database) - 1:
                     accounts[list(self.database)[index + 1][0]][account]["opening"] = accounts[monthlog[0]][account]["closing"]
-
-        print(accounts)
                             
         for account in unique_accounts:
             ledger_commands += f"\t% {account.upper()} ACCOUNT \n"
@@ -190,13 +105,13 @@ class compiler:
                 if nature == "c":
                     ledger_commands += f"\t\t\\tobalcd{{30 {month[0:3]}}}{{{closing_balance}}}\n"
 
-                ledger_commands += "\\mt\n\t\t"
+                ledger_commands += "\t\t\\mt\n\t\t"
                 if ld < lc:
                     for i in range(lc - ld):
                         ledger_commands += "\\mt"
                         
                 total_amt = opening_balance + sum([accounts[month][account]["debit"][i][2] for i in range(ld)])
-                ledger_commands += f"\t\t\\total{{{total_amt}}}\n\t\t\\mt\n"
+                ledger_commands += f"\n\t\t\\total{{{total_amt}}}\n\t\t\\mt\n"
                         
             ledger_commands += "\n\t}{\n"
             
@@ -217,17 +132,15 @@ class compiler:
                 if nature == "d":
                     ledger_commands += f"\t\t\\bybalcd{{30 {month[0:3]}}}{{{closing_balance}}}\n"
 
-                ledger_commands += "\\mt\n\t\t"
+                ledger_commands += "\t\t\\mt\n\t\t"
                 if lc < ld:
                     for i in range(ld - lc):
                         ledger_commands += "\\mt"
                         
                 total_amt = closing_balance + sum([accounts[month][account]["credit"][i][2] for i in range(lc)])
-                ledger_commands += f"\t\t\\total{{{total_amt}}}\n\t\t\\mt\n"
+                ledger_commands += f"\n\t\t\\total{{{total_amt}}}\n\t\t\\mt\n"
             
             ledger_commands += "\t\t\n\t}\n\n"
-
-        print(accounts)
 
         with open(self.file_name, "a") as file:
             file.write(ledger_commands)
@@ -260,6 +173,9 @@ class compiler:
 
         if keep_tex == False:
             os.remove(self.file_name)
-        os.remove(self.file_name[:-4] + ".aux")
-        os.remove(self.file_name[:-4] + ".log")
-        os.remove(self.file_name[:-4] + ".out")
+        try:
+            os.remove(self.file_name[:-4] + ".aux")
+            os.remove(self.file_name[:-4] + ".log")
+            os.remove(self.file_name[:-4] + ".out")
+        except FileNotFoundError:
+            pass

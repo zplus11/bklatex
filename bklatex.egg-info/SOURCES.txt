@@ -1,0 +1,13 @@
+LICENSE
+MANIFEST.in
+README.md
+setup.py
+bklatex/__init__.py
+bklatex/account.py
+bklatex/compiler.py
+bklatex/month.py
+bklatex/preamble.tex
+bklatex.egg-info/PKG-INFO
+bklatex.egg-info/SOURCES.txt
+bklatex.egg-info/dependency_links.txt
+bklatex.egg-info/top_level.txt
