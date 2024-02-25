@@ -1,15 +1,22 @@
 # bklatex
 Typeset accounting journals and ledgers with LaTeX easily using this python library.
 
-[!] To run this program, you need to have the following installed:
+`[ ! ]` To run this program, you need to have the following installed:
 - a LaTeX distribution with `pdflatex`. See [MiKTeX](https://miktex.org/)
 - Python. See [Python](https://www.python.org/)
 
 ## Program
-bklatex helps typeset accounting journals and ledgers using LaTeX and some programming. Rather than typesetting them yourself, you can use the classes and methods defined in `bklatex.py` and create a Python script to easily have them typeset by Python.
+bklatex helps typeset accounting journals and ledgers using LaTeX and some programming. Rather than typesetting them yourself, you can use the classes and methods defined and create a Python script to easily have them typeset by Python.
+
+## Installation
+To install the package, run
+
+```
+pip install git+"https://github.com/zplus11/bklatex"
+```
 
 ## Usage
-Import the library in your python file, then begin a new account and start a month:
+Import the package in your python file, then begin a new account and start a month:
 
 ```
 from bklatex import *
@@ -51,6 +58,12 @@ default values for above booleans are `keep_tex = False`, `journals = True`, `le
 ## Illustration
 A bigger illustration is given in `illustrations` directory.
 
-[!] Keep in mind this is still a work in progress. In particular, printing ledgers needs more work.
+`[ ! ]` Keep in mind this is still a work in progress. In particular, printing ledgers needs more work.
+
+## Version Tracker
+
+**0.0.1:** Initial distributable (while not complete) release.
+
+**0.0.2:** Changed `preamble.tex` into `accountancy.sty` usable as a standalone package.
 
 Thank you for reading this far.

@@ -1,49 +1,33 @@
-% This is preamble.tex from https://github.com/zplus11/bklatex.git
+% This is accountancy.cls part of https://github.com/zplus11/bklatex.git
 % a basic project to typeset accounting journals and ledgers using LaTeX
 % and some programming with Python. Feel free to edit anything to your preference.
 % Suggest via the repository on github.
 
-\documentclass[a4paper, 10pt]{article}
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{accountancy}
 
-\usepackage{geometry}
-\usepackage{tabularx}
-\usepackage{booktabs}
-\usepackage{enumerate, enumitem}
-\usepackage{titlesec}
-\usepackage{array}
-\usepackage{makecell}
-\usepackage{titling}
-\usepackage{hyperref}
-
-
-\geometry{margin=1cm}
-\setlength{\parindent}{0pt}
-\pagestyle{empty}
-
-\renewcommand{\maketitle}{
-	\begin{center}
-		{\LARGE\thetitle} \\[10pt]
-		{\large\thedate} \\[5pt]
-		{\scshape Printed Using Bookkeeping-LaTeX\footnote{\normalfont https://github.com/zplus11/Bookkeeping-LaTeX.git}}
-	\end{center}
-	\vspace{\baselineskip}
+\newif\if@smallmargins
+\DeclareOption{smallmargins}{
+	\@smallmarginstrue
 }
 
-\titleformat{\section}{\bfseries\large}{\thesection. }{0cm}{}
+\DeclareOption*{\PackageWarning{accountancy}{Bad option ``\CurrentOptions''}}
+\ProcessOptions\relax
+\if@smallmargins\RequirePackage[margin=1in]{geometry}\fi
 
-\newcommand{\insertitem}[1]{\item #1}
-\NewDocumentCommand{\mylist}{>{\SplitList{;;;}}m}
-{
-	\begin{enumerate}[itemsep = 0pt, topsep = 0pt, parsep = 0pt, partopsep = 0pt, leftmargin = *]
-		\ProcessList{#1}{\insertitem}	
-	\end{enumerate}
-}
+\RequirePackage{tabularx}
+\RequirePackage{booktabs}
+\RequirePackage{array}
+\RequirePackage{makecell}
+\RequirePackage{hyperref}
 
 \newcommand{\journal}[3]{
-	\begin{center}
-		{\bfseries In the books of #1} \\ {\itshape for the year ended 31 March, #2} \\ {\bfseries Journal Account}
-	\end{center}
-	\vspace{-.3cm}
+	\noindent
+	\centerline{\bfseries In the books of #1}
+	\centerline{\itshape for the year ended 31 March, #2}
+	\centerline{\bfseries Journal Account}
+	\vskip3pt
+	\noindent
 	\begin{tabularx}{\linewidth}{|c|X|c|r|r|}
 		\hline
 		\textbf{Date} & \textbf{Particulars} & \textbf{LF} & \textbf{Dr Amt} & \textbf{Cr Amt} \\
@@ -54,11 +38,9 @@
 }
 
 \newcommand{\ledger}[3]{
-	\begin{center}
-		{Dr. \hfill {\bfseries #1} \hfill Cr.}
-	\end{center}
-	\vspace{-.3cm}
-	\noindent
+	\begin{samepage}
+	\begin{center}{Dr. \hfill {\bfseries #1} \hfill Cr.}\end{center}
+	\par\vskip-.3cm\noindent
 	\begin{minipage}{.5\linewidth}
 		\begin{tabularx}{\linewidth}{|c|X|c|r|}
 			\hline
@@ -78,6 +60,7 @@
 			\hline
 		\end{tabularx}
 	\end{minipage}
+	\end{samepage}
 }		
 
 \newcommand{\jyear}[1]{{\bfseries #1} & & & & \\}
@@ -94,3 +77,5 @@
 \newcommand{\bybalbd}[2]{#1 & By balance b/d & & {\ttfamily #2} \\}
 \newcommand{\total}[1]{\cline{4-4} & & & {\ttfamily #1} \\}
 \newcommand{\mt}{& & & \\}
+
+\endinput

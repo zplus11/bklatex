@@ -13,9 +13,9 @@ class compiler:
         
     def open_tex(self):
         cwd = self.cwd.replace("\\", "/")
-        opening_commands = f"% This is {self.file_name}.tex printed using https://github.com/zplus11/Bookkeeping-LaTeX.git\n\n"
-        opening_commands += f"\\input{{{cwd}/preamble.tex}}\n\\title{{Bookkeeping with \\LaTeX}}\n\\date{{\\today}}\n\n"
-        opening_commands += f"\\begin{{document}}\n\t\\maketitle\n\n"
+        opening_commands = f"% This is {self.file_name}.tex printed using https://github.com/zplus11/bklatex.git\n\n"
+        opening_commands += f"\\documentclass{{article}}\n\\usepackage[smallmargins]{{{cwd}/accountancy}}\n"
+        opening_commands += f"\\begin{{document}}\n\t\n\n"
 
         with open(self.file_name, "w") as file:
             file.write(opening_commands)
@@ -111,7 +111,7 @@ class compiler:
                         ledger_commands += "\\mt"
                         
                 total_amt = opening_balance + sum([accounts[month][account]["debit"][i][2] for i in range(ld)])
-                ledger_commands += f"\n\t\t\\total{{{total_amt}}}\n\t\t\\mt\n"
+                ledger_commands += f"\n\t\t\\total{{{total_amt}}}\n"
                         
             ledger_commands += "\n\t}{\n"
             
@@ -138,7 +138,7 @@ class compiler:
                         ledger_commands += "\\mt"
                         
                 total_amt = closing_balance + sum([accounts[month][account]["credit"][i][2] for i in range(lc)])
-                ledger_commands += f"\n\t\t\\total{{{total_amt}}}\n\t\t\\mt\n"
+                ledger_commands += f"\n\t\t\\total{{{total_amt}}}\n"
             
             ledger_commands += "\t\t\n\t}\n\n"
 

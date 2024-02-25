@@ -1,11 +1,9 @@
-% This is illustration.tex.tex printed using https://github.com/zplus11/Bookkeeping-LaTeX.git
+% This is illustration.tex.tex printed using https://github.com/zplus11/bklatex.git
 
-\input{E:/installs/Python/Lib/site-packages/bklatex/preamble.tex}
-\title{Bookkeeping with \LaTeX}
-\date{\today}
-
+\documentclass{article}
+\usepackage[smallmargins]{E:/installs/Python/Lib/site-packages/bklatex/accountancy}
 \begin{document}
-	\maketitle
+	
 
 	%%%%%%%%%%%%%%%%%%%%%%
 	% JOURNAL ENTRIES
@@ -48,13 +46,11 @@
 		\mt
 		\mt
 		\total{500000}
-		\mt
 		\tobalbd{1 Jan}{350000}
 		\ldr{5 Jan}{Bank}{50000}{7}
 		\mt
 		
 		\total{400000}
-		\mt
 
 	}{
 		\lcr{29 Dec}{Bank}{100000}{4}
@@ -63,40 +59,10 @@
 		\mt
 		
 		\total{500000}
-		\mt
 		\bybalcd{30 Jan}{400000}
 		\mt
 		\mt
 		\total{400000}
-		\mt
-		
-	}
-
-	% CAPITAL ACCOUNT 
-	\ledger{Capital a/c}{
-		\tobalbd{1 Dec}{0}
-		\mt
-		\mt
-		\total{0}
-		\mt
-		\tobalbd{1 Jan}{-500000}
-		\mt
-		
-		\total{-500000}
-		\mt
-
-	}{
-		\lcr{29 Dec}{Cash}{500000}{2}
-		\bybalcd{30 Dec}{-500000}
-		\mt
-		
-		\total{0}
-		\mt
-		\bybalcd{30 Jan}{-500000}
-		\mt
-		
-		\total{-500000}
-		\mt
 		
 	}
 
@@ -107,25 +73,45 @@
 		\mt
 		
 		\total{100000}
-		\mt
 		\tobalbd{1 Jan}{100000}
 		\mt
 		\mt
 		\total{100000}
-		\mt
 
 	}{
 		\bybalcd{30 Dec}{100000}
 		\mt
 		\mt
 		\total{100000}
-		\mt
 		\lcr{5 Jan}{Cash}{50000}{8}
 		\bybalcd{30 Jan}{50000}
 		\mt
 		
 		\total{100000}
+		
+	}
+
+	% CAPITAL ACCOUNT 
+	\ledger{Capital a/c}{
+		\tobalbd{1 Dec}{0}
 		\mt
+		\mt
+		\total{0}
+		\tobalbd{1 Jan}{-500000}
+		\mt
+		
+		\total{-500000}
+
+	}{
+		\lcr{29 Dec}{Cash}{500000}{2}
+		\bybalcd{30 Dec}{-500000}
+		\mt
+		
+		\total{0}
+		\bybalcd{30 Jan}{-500000}
+		\mt
+		
+		\total{-500000}
 		
 	}
 
@@ -136,24 +122,20 @@
 		\mt
 		
 		\total{50000}
-		\mt
 		\tobalbd{1 Jan}{50000}
 		\mt
 		
 		\total{50000}
-		\mt
 
 	}{
 		\bybalcd{30 Dec}{50000}
 		\mt
 		\mt
 		\total{50000}
-		\mt
 		\bybalcd{30 Jan}{50000}
 		\mt
 		
 		\total{50000}
-		\mt
 		
 	}
 
