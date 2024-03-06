@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: bklatex
-Version: 0.0.3
+Version: 0.1.0
 Summary: Typeset accounting journals and ledgers with Python & LaTeX
 Author: Naman Taggar
 Classifier: Programming Language :: Python :: 3
@@ -13,7 +13,7 @@ License-File: LICENSE
 # bklatex
 Typeset accounting journals and ledgers with LaTeX easily using this python library.
 
-`[ ! ]` To run this program, you need to have the following installed:
+`[!]` To run this program, you need to have the following installed:
 - a LaTeX distribution with `pdflatex`. See [MiKTeX](https://miktex.org/)
 - Python. See [Python](https://www.python.org/)
 
@@ -87,7 +87,7 @@ Finally, once you are satisfied, you can compile a pdf for your account `acc`:
 >>> acc.make_pdf(keep_tex = True, journals = True, ledgers = True)
 Compiler activated
 [O]
-[J] Printed 4 entries in the journal
+[J] Printed 2 entries in the journal
 [L] Printed 3 accounts in the ledger
 [C]
 [F] Calling pdflatex...
@@ -134,7 +134,7 @@ After the compilation process has completed, you will receive two files: `my_acc
 ## Illustrations
 The above mentioned example and a bigger illustration are both given in the `illustrations` directory.
 
-`[ ! ]` Keep in mind this is still a work in progress. In particular, printing ledgers needs more work.
+`[!]` Keep in mind this is still a work in progress. In particular, printing ledgers needs more work.
 
 ## Version Tracker
 
@@ -142,6 +142,6 @@ The above mentioned example and a bigger illustration are both given in the `ill
 
 **0.0.2:** Changed `preamble.tex` into `accountancy.sty` usable as a standalone package.
 
-**0.0.3:** QoL changes; better logging
+**0.1.0:** Made entry class; some QoL changes like better logging.
 
 Thank you for reading this far.

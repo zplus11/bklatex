@@ -28,7 +28,6 @@ class compiler:
         journal_commands = f"\t%%%%%%%%%%%%%%%%%%%%%%\n\t% JOURNAL ENTRIES\n\t%%%%%%%%%%%%%%%%%%%%%%\n\n\t\\journal{{{self.company_name}}}{{{self.year}}}{{\n"
         current_year = ""
 
-        print(self.database)
         for month in self.database:
             if month[1] != current_year:
                 journal_commands += f"\t\t\\jyear{{{month[1]}}}\n"
@@ -44,7 +43,7 @@ class compiler:
                         journal_commands += f"\t\t\\jcr{{{entry.credit_accounts[i].title()}}}{{{entry.credit_folios[i]}}}{{{entry.credit_amounts[i]}}}\n"
                 journal_commands += f"\t\t\\jnar{{{entry.narration}}}\n"
         journal_commands += "\t}\n\n"
-        print("Printed", sum([len(month) for month in self.database]), "entries in the journal") 
+        print("Printed", sum([len(month.entries) for month in self.database.values()]), "entries in the journal") 
 
         with open(self.file_name, "a") as file:
             file.write(journal_commands)

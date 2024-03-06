@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name = "bklatex",
-    version = "0.0.3",
+    version = "0.1.0",
     author = "Naman Taggar",
     description = "Typeset accounting journals and ledgers with Python & LaTeX",
     long_description = open("README.md").read(),
