@@ -1,6 +1,7 @@
 # bklatex/__init__.py
 
+print("This is bklatex v0.0.3")
+
 from .account import account
-from .month import month
-from .compiler import compiler
-__all__ = ["account", "month", "compiler"]
+
+__all__ = ["account"]

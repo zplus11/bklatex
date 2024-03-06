@@ -1,13 +1,12 @@
-from .account import account
+from bklatex.entry import entry
 
 
 class month:
-    def __init__(self, acc, month, year):
-        assert isinstance(acc, account), f"{account} is not an account class object"
-        acc.database[(month, year)] = []
-        self.entries = acc.database[(month, year)]
+    def __init__(self, month, year):
+        self.entries = []
         self.month = month
         self.year = year
+        print(f"Created month {self.month} in the accounts")
 
     def clean(self, string):
         cleaned = ""
@@ -29,22 +28,38 @@ class month:
     ):
         if not len(debit_folios): debit_folios = [""]*len(debit_accounts)
         if not len(credit_folios): credit_folios = [""]*len(credit_accounts)
-        constituted = [
-            self.clean(date), 
-            [self.clean(name) for name in debit_accounts],
-            [self.clean(name) for name in credit_accounts],
-            debit_amounts,
-            credit_amounts,
-            debit_folios,
-            credit_folios,
-            self.clean(narration)
-        ]
-        bool1 = (len(constituted[1]) == len(constituted[3]) and (len(constituted[5]) == len(constituted[3]) or not len(constituted[5]))) and (len(constituted[2]) == len(constituted[4]) and (len(constituted[6]) == len(constituted[4]) or not len(constituted[6])))
-        bool2 = all(constituted[i][j] > 0 for i in [3, 4] for j in range(len(constituted[i])))
-        assert bool2, "Debit or credit amounts were not integer values."
-        assert all(isinstance(constituted[i], list) for i in [1, 2, 3, 4]) and bool1, "Ensure debit (credit) accounts, amounts and folios are in lists and have equal lengths."
+        constituted = entry(
+            date = self.clean(date), 
+            debit_accounts = [self.clean(name) for name in debit_accounts],
+            credit_accounts = [self.clean(name) for name in credit_accounts],
+            debit_amounts = debit_amounts,
+            credit_amounts = credit_amounts,
+            debit_folios = debit_folios,
+            credit_folios = credit_folios,
+            narration = self.clean(narration)
+        )
+        bool1 = (
+                len(constituted.debit_accounts) == len(constituted.debit_amounts)
+                and (len(constituted.debit_folios) == len(constituted.debit_accounts) or not len(constituted.debit_folios))
+            ) and (
+                len(constituted.credit_accounts) == len(constituted.credit_amounts)
+                and (len(constituted.credit_folios) == len(constituted.credit_accounts) or not len(constituted.credit_folios))
+            )
+        bool2 = all(i > 0 for i in constituted.debit_amounts) and all(i > 0 for i in constituted.credit_amounts)
+        for part in [
+            constituted.debit_accounts,
+            constituted.credit_accounts,
+            constituted.debit_amounts,
+            constituted.credit_amounts,
+            constituted.debit_folios,
+            constituted.credit_folios
+        ]:
+            assert type(part) == list, f"{part}: list expected, {type(part)} received"
+        assert bool2, "Debit or credit amounts were not positive values"
+        assert bool1, "Ensure debit (credit) accounts, amounts and folios are in lists and have equal lengths"
         
         self.entries.append(constituted)
+        print(f"Recorded entry: By {constituted.debit_accounts} ({constituted.debit_amounts}); To {constituted.credit_accounts} ({constituted.credit_amounts})")
         
     def __enter__(self):
         return self

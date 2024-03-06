@@ -6,6 +6,7 @@ bklatex/__init__.py
 bklatex/account.py
 bklatex/accountancy.sty
 bklatex/compiler.py
+bklatex/entry.py
 bklatex/month.py
 bklatex.egg-info/PKG-INFO
 bklatex.egg-info/SOURCES.txt

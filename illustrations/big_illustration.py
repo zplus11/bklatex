@@ -1,9 +1,9 @@
 from bklatex import *
 
 
-acc = account(file_name = "illustration", company_name = "That Company Pvt. Ltd.", year = "2024")
+acc = account(file_name = "big_illustration", company_name = "That Company Pvt. Ltd.", year = "2024")
 
-with month(acc, "December", "2023") as dec:
+with acc.month("December", "2023") as dec:
     dec.entry(
         date = "29",
         debit_accounts = ["Cash"],
@@ -35,7 +35,7 @@ with month(acc, "December", "2023") as dec:
         narration = "being furniture bought"
     )
 
-with month(acc, "January", "2024") as jan:
+with acc.month("January", "2024") as jan:
     jan.entry(
         date = "5",
         debit_accounts = ["Cash"],
