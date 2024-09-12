@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
-Name: bklatex
-Version: 1.0.0
+Name: bk
+Version: 0.0a0
 Summary: Typeset accounting journals and ledgers with Python & LaTeX
 Author: Naman Taggar
 Classifier: Programming Language :: Python :: 3
@@ -73,20 +73,20 @@ This will print the PDF file for this document (see [illustrations/trial.pdf](il
 doc.print(pdf=True, tex=True)
 ```
 
-which will output a file that includes this:
+which will output:
 
 ```tex
+% This was printed using bklatex (https://github.com/zplus11/bklatex)
+% Copyright (c) 2024 Naman Taggar
 \documentclass{article}
 \usepackage[smallmargins]{E:/installs/Python/Lib/site-packages/bklatex/accountancy}
 \begin{document}
-\journal{
 \jdr{1 Apr}{Cash}{1}{100000}
 \jcr{Capital}{2}{100000}
 \jnar{being capital introduced}
 \jdr{2 Apr}{Purchases}{}{10000}
 \jcr{Cash}{}{10000}
 \jnar{being purchases made by cash}
-}
 \end{document}
 ```
 
@@ -99,7 +99,7 @@ with doc.append(Journal()) as journal:
 ```
 
 ## Illustrations
-The above mentioned example and probably more illustrations are given in the `illustrations` directory.
+The above mentioned example and a bigger illustration are both given in the `illustrations` directory.
 
 `[!]` Keep in mind this is still a work in progress. A lot of things are to be added.
 

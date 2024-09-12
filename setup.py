@@ -2,13 +2,12 @@ import setuptools
 
 setuptools.setup(
     name = "bklatex",
-    version = "0.1.0",
+    version = "1.0.0",
     author = "Naman Taggar",
     description = "Typeset accounting journals and ledgers with Python & LaTeX",
     long_description = open("README.md").read(),
     long_description_content_type = "text/markdown",
-    packages = ["bklatex"],
-    modules = ["account"],
+    packages = setuptools.find_packages(),
     classifiers = [
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

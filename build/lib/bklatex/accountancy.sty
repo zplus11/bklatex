@@ -21,10 +21,8 @@
 \RequirePackage{makecell}
 \RequirePackage{hyperref}
 
-\newcommand{\journal}[3]{
+\newcommand{\journal}[1]{
 	\noindent
-	\centerline{\bfseries In the books of #1}
-	\centerline{\itshape for the year ended 31 March, #2}
 	\centerline{\bfseries Journal Account}
 	\vskip3pt
 	\noindent
@@ -32,7 +30,7 @@
 		\hline
 		\textbf{Date} & \textbf{Particulars} & \textbf{LF} & \textbf{Dr Amt} & \textbf{Cr Amt} \\
 		\hline
-		#3
+		#1
 		\hline
 	\end{tabularx}
 }
