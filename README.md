@@ -1,4 +1,7 @@
 # bklatex
+
+Copyright (c) 2024-25 Naman Taggar
+
 Typeset books of account with LaTeX easily using this python library.
 
 `[!]` To run this program, you need to have the following installed:
@@ -83,7 +86,7 @@ Moreover, `.tex` files for single accounts (such as journal above) can also be p
 ```py
 with doc.append(Journal()) as journal:
 	...
-	journal.print_tex(name = "filename.tex"))
+	journal.print_tex(name = "journal"))
 ```
 
 ## Illustrations
